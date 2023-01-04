@@ -1,5 +1,6 @@
-from Parsing import Parsing
-from Entity.HigherEducation import HigherEducation
+from .Parsing import Parsing
+from ..Entity.HigherEducation import HigherEducation 
+import re
 
 
 class ParserHigherEducation(Parsing):
@@ -7,5 +8,16 @@ class ParserHigherEducation(Parsing):
         self.__regex = regex
         self.__html = html
 
-    def parse(self) -> list[HigherEducation]:
-        ...
+    def parse(self) -> list:
+        higher_educations = []
+        elements = re.findall(self.__regex, self.__html)
+
+        for element in elements:
+            arr: list[str] = []
+            for value in element:
+                arr.append(value)
+            education = HigherEducation()
+            education.field_values = arr
+            higher_educations.append(education)
+
+        return higher_educations

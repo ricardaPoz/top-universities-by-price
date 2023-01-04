@@ -3,13 +3,14 @@ from abc import abstractclassmethod, ABC, abstractproperty
 
 class Education(ABC):
     @abstractproperty
-    def get_field_values(self) -> list[str]:
+    def field_values(self) -> list[str]:
         pass
 
     @abstractproperty
-    def get_field_names(self) -> list[str]:
+    def field_names(self) -> list[str]:
         pass
 
-    @abstractclassmethod
-    def set_field_values(self):
+    @field_values.setter
+    @abstractproperty
+    def field_values(self, field_values: list[str]):
         pass
