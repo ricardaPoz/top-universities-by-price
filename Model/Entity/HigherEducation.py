@@ -3,17 +3,17 @@ from .Education import Education
 
 class HigherEducation(Education):
     def __init__(self) -> "HigherEducation":
-        self.__field_names = [
+        self.__field_names: list[str] = [
             "detailedInformation",
             "urlLogo",
             "abbreviation",
             "name",
             "coast",
         ]
-        self.__field_values = None
+        self.__field_values: list[str] = None
 
     @property
-    def field_values(self):
+    def field_values(self) -> list[str]:
         return self.__field_values
 
     @property
@@ -23,4 +23,7 @@ class HigherEducation(Education):
     @field_values.setter
     def field_values(self, field_values: list[str]):
         self.__field_values = field_values
-        self.__field_values[0] = "https://tabiturient.ru/vuzu/" +  self.__field_values[0]
+        self.__field_values[0] = "https://tabiturient.ru/vuzu/" + self.__field_values[0]
+
+    def to_dict(self) -> dict:
+        return dict(zip(self.__field_names, self.__field_values))
