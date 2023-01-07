@@ -1,4 +1,4 @@
-from Database.Entity.config import Base
+from Database.Entity.Base import Base
 from sqlalchemy.orm import relationship
 from sqlalchemy import (
     Table,
@@ -10,8 +10,9 @@ from sqlalchemy import (
     PrimaryKeyConstraint,
     UniqueConstraint,
     ForeignKeyConstraint,
-    ForeignKey
+    ForeignKey,
 )
+
 
 class PassingGrades(Base):
     __tablename__ = "passing_grades"

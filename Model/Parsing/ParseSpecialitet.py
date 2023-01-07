@@ -20,16 +20,15 @@ class ParseSpecialitet(Parsing):
                 "b", attrs={"style": "text-transform:uppercase;"}
             ).contents[0]
 
-            speciality = (
-                element_tag.find(
-                    "span", attrs={"style": "color:#8D8D8D;", "class": "font2"}
-                )
-                .contents[0]
-                .split("|")
-            )
+            speciality = element_tag.find(
+                "span", attrs={"style": "color:#8D8D8D;", "class": "font2"}
+            ).contents[0]
 
-            form = speciality[0].strip()
-            code = speciality[1].strip()
+            if speciality == "Подразделение":
+                return specialitets
+
+            form = speciality.split("|")[0].strip()
+            code = speciality.split("|")[1].strip()
 
             elements_mobpadd = element_tag.find_all("div", class_="mobpadd20-3")
             for element_mobpadd in elements_mobpadd:

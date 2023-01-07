@@ -3,85 +3,82 @@ from sqlalchemy.orm import Session, sessionmaker
 from Model.HTTPClient.HTTPClient import HTTPClient
 from Model.Parsing.ParserHigherEducation import ParserHigherEducation
 from Model.Parsing.ParseSpecialitet import ParseSpecialitet
+import Utilities.Config as app_conf
+from multiprocessing import Pool, cpu_count, Manager, Process
 
 
 class Controller:
     def __init__(self, engine):
         self.__engine = engine
 
-    def create_tables(self):
-        config.Base.metadata.create_all(self.__engine)
+    def create_all_tables(self):
+        Base.Base.metadata.create_all(self.__engine)
 
-    def get_education(self):
-        html = HTTPClient("https://tabiturient.ru/vuzcost/").html()
-        regex = r"(?ms)<a href=\"https://tabiturient\.ru/vuzu/(.*?)\".*?src=\"(.*?)\".*?<b>(.*?)<.*?<br>[^\t](.*?)<.*?<b>(.*?)<"
-
-        educations = ParserHigherEducation(regex, html).parse()
-
-        return educations
-
-    def add_education(self):
-        html = HTTPClient("https://tabiturient.ru/vuzcost/").html()
-        regex = r"(?ms)<a href=\"https://tabiturient\.ru/vuzu/(.*?)\".*?src=\"(.*?)\".*?<b>(.*?)<.*?<br>[^\t](.*?)<.*?<b>(.*?)<"
-        educations = ParserHigherEducation(regex, html).parse()
-        
+    def fill_data_base(self):
         session = Session(bind=self.__engine)
 
-        db_educations = []
+        html = HTTPClient(app_conf.URL_PARSE).html()
+        higher_education = ParserHigherEducation(app_conf.REGEX, html).parse()
 
-        for education in educations:
+        db_educations = []
+        db_images = []
+        for education in higher_education:
             db_education = HigherEducation.HigherEducation(
-                name = education.field_values[3],
-                coast = education.field_values[4],
-                abbreviation = education.field_values[2],
-                detailed_information = education.field_values[0],
+                name=education.field_values[3],
+                coast=education.field_values[4],
+                abbreviation=education.field_values[2],
+                detailed_information=education.field_values[0],
             )
             db_educations.append(db_education)
 
-        session.add_all(db_educations)
+            session.add(db_education)
+            session.flush()
+
+            db_image = Images.Images(
+                url=education.field_values[1], higher_education_id=db_education.id
+            )
+            db_images.append(db_image)
+
+        session.add_all(db_images)
+
+        for education in db_educations:
+            self.__inser_specialitet(education, session)
+
         session.commit()
+
         session.close()
 
-
-        
-
-    def add_specialitet(self):
-        
-        session = Session(bind=self.__engine)
-
-        education = session.query(HigherEducation.HigherEducation).filter(HigherEducation.HigherEducation.id == 1).first()
-        
-        html = HTTPClient(education.detailed_information).html()
+    def __inser_specialitet(
+        self, education: HigherEducation.HigherEducation, session: Session
+    ):
+        html = HTTPClient(education.detailed_information, timeouth=200).html()
         specialitets = ParseSpecialitet(html).parse()
 
-
-        for spec in specialitets:
+        db_specialitets = []
+        for specialitet in specialitets:
             db_spec = Specialitet.Specialitet(
-                name = spec.field_values[0],
-                form = spec.field_values[1],
-                code = spec.field_values[2],
-                division = spec.field_values[3],
-                profile = spec.field_values[4],
-                higher_education_id = 1
+                name=specialitet.field_values[0],
+                form=specialitet.field_values[1],
+                code=specialitet.field_values[2],
+                division=specialitet.field_values[3],
+                profile=specialitet.field_values[4],
+                higher_education_id=education.id,
             )
-
             session.add(db_spec)
             session.flush()
-            
-            db_exam = Examinations.Examinations(
-                examinations = ", ".join(spec.field_values[5]),
-                specialitet_id = db_spec.id
-            )
 
+            db_exam = Examinations.Examinations(
+                examinations=", ".join(specialitet.field_values[5]),
+                specialitet_id=db_spec.id,
+            )
             session.add(db_exam)
 
-            session.commit()
+            for passing_grades in specialitet.field_values[6]:
+                db_passing_grades = PassingGrades.PassingGrades(
+                    grades=passing_grades[0] + " " + passing_grades[1],
+                    specialitet_id=db_spec.id,
+                )
+                session.add(db_passing_grades)
 
-        session.close()
-
-            
-            
-
-
-        # html = HTTPClient("https://tabiturient.ru/vuzcost/").html()
-
+        session.add_all(db_specialitets)
+        print(f"Вуз {education.name} добавлено {len(db_specialitets)}")

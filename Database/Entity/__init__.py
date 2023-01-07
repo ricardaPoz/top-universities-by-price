@@ -1,1 +1,9 @@
-__all__ = ["config", "User", "HigherEducation", "Specialitet", "PassingGrades", "Examinations"]
+__all__ = [
+    "Base",
+    "User",
+    "HigherEducation",
+    "Images",
+    "Specialitet",
+    "PassingGrades",
+    "Examinations",
+]

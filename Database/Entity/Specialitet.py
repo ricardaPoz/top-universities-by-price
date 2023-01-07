@@ -1,17 +1,11 @@
-from Database.Entity.config import Base
+from Database.Entity.Base import Base
 from sqlalchemy.orm import relationship
 
 from sqlalchemy import (
-    Table,
-    Index,
     Integer,
     String,
     Column,
-    Text,
-    PrimaryKeyConstraint,
-    UniqueConstraint,
-    ForeignKeyConstraint,
-    ForeignKey
+    ForeignKey,
 )
 
 
@@ -27,5 +21,3 @@ class Specialitet(Base):
     higher_education = relationship("HigherEducation", back_populates="specialitet")
     examinations = relationship("Examinations", back_populates="specialitet")
     passing_grades = relationship("PassingGrades", back_populates="specialitet")
-
-    

@@ -1,4 +1,5 @@
 from .Education import Education
+from .Specialitet import Specialitet
 
 
 class HigherEducation(Education):
@@ -9,8 +10,10 @@ class HigherEducation(Education):
             "abbreviation",
             "name",
             "coast",
+            "specialitets",
         ]
         self.__field_values: list[str] = None
+        self.__specialitets: list[Specialitet] = None
 
     @property
     def field_values(self) -> list[str]:
@@ -19,6 +22,15 @@ class HigherEducation(Education):
     @property
     def field_names(self) -> list[str]:
         return self.__field_names
+
+    @property
+    def specialitets(self) -> list[Specialitet]:
+        return self.__specialitets
+
+    @specialitets.setter
+    def specialitets(self, specialitets: list[Specialitet]):
+        self.__specialitets = specialitets
+        self.__field_names[5] = self.__specialitets
 
     @field_values.setter
     def field_values(self, field_values: list[str]):

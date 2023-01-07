@@ -1,17 +1,12 @@
-from Database.Entity.config import Base
-from sqlalchemy.orm import relationship
 from sqlalchemy import (
-    Table,
-    Index,
     Integer,
     String,
     Column,
-    Text,
-    PrimaryKeyConstraint,
-    UniqueConstraint,
-    ForeignKeyConstraint,
-    ForeignKey
+    ForeignKey,
 )
+from sqlalchemy.orm import relationship
+
+from Database.Entity.Base import Base
 
 
 class Examinations(Base):

@@ -1,4 +1,4 @@
-from Database.Entity.config import Base
+from Database.Entity.Base import Base
 
 from sqlalchemy import (
     Integer,
@@ -8,6 +8,7 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 
+# role = Column(String(256), nullable=False)
 
 
 class User(Base):
@@ -15,12 +16,8 @@ class User(Base):
     id = Column(Integer)
     user_name = Column(String(256), nullable=False)
     password = Column(String(256), nullable=False)
-    role = Column(String(256), nullable=False)
 
     __table_args__ = (
         PrimaryKeyConstraint("id", name="user_pk"),
         UniqueConstraint("user_name"),
     )
-
-
-
