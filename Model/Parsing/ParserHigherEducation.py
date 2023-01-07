@@ -15,6 +15,7 @@ class ParserHigherEducation(Parsing):
         for element in elements:
             arr: list[str] = []
             for value in element:
+                value = value.strip().replace("&quot;", "")
                 arr.append(value)
             education: HigherEducation = HigherEducation()
             education.field_values = arr

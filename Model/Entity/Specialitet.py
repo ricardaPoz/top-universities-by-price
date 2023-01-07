@@ -5,7 +5,8 @@ class Specialitet(Education):
     def __init__(self) -> "Specialitet":
         self.__field_names: list[str] = [
             "name",
-            "speciality",
+            "form",
+            "code",
             "division",
             "profile",
             "examinations",

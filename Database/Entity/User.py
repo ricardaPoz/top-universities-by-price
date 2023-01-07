@@ -1,4 +1,5 @@
-from ..Utilities.create_table import Base
+from Database.Entity.config import Base
+
 from sqlalchemy import (
     Integer,
     String,
@@ -6,6 +7,7 @@ from sqlalchemy import (
     PrimaryKeyConstraint,
     UniqueConstraint,
 )
+
 
 
 class User(Base):
@@ -19,3 +21,6 @@ class User(Base):
         PrimaryKeyConstraint("id", name="user_pk"),
         UniqueConstraint("user_name"),
     )
+
+
+

@@ -20,9 +20,16 @@ class ParseSpecialitet(Parsing):
                 "b", attrs={"style": "text-transform:uppercase;"}
             ).contents[0]
 
-            speciality = element_tag.find(
-                "span", attrs={"style": "color:#8D8D8D;", "class": "font2"}
-            ).contents[0]
+            speciality = (
+                element_tag.find(
+                    "span", attrs={"style": "color:#8D8D8D;", "class": "font2"}
+                )
+                .contents[0]
+                .split("|")
+            )
+
+            form = speciality[0].strip()
+            code = speciality[1].strip()
 
             elements_mobpadd = element_tag.find_all("div", class_="mobpadd20-3")
             for element_mobpadd in elements_mobpadd:
@@ -31,8 +38,8 @@ class ParseSpecialitet(Parsing):
                 element: Tag = element_mobpadd
 
                 division_profile: ResultSet = element.find_all("span", class_="font2")
-                division = division_profile[0].contents[1]
-                profile = division_profile[1].contents[1]
+                division = division_profile[0].contents[1].strip()
+                profile = division_profile[1].contents[1].strip()
 
                 examinations: list[str] = [
                     examination.contents[0].replace("\n", "")
@@ -54,7 +61,8 @@ class ParseSpecialitet(Parsing):
 
                 specialitet.field_values = [
                     name,
-                    speciality,
+                    form,
+                    code,
                     division,
                     profile,
                     examinations,

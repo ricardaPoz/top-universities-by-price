@@ -1,0 +1,1 @@
+__all__ = ["config", "User", "HigherEducation", "Specialitet", "PassingGrades", "Examinations"]
