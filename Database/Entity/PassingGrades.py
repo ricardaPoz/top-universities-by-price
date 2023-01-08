@@ -1,5 +1,5 @@
 from Database.Entity.Base import Base
-from sqlalchemy.orm import relationship
+from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import (
     Table,
     Index,
@@ -14,9 +14,8 @@ from sqlalchemy import (
 )
 
 
-class PassingGrades(Base):
+class PassingGrades(Base, SerializerMixin):
     __tablename__ = "passing_grades"
     id = Column(Integer, primary_key=True)
     grades = Column(String(256), nullable=False)
     specialitet_id = Column(Integer, ForeignKey("specialitets.id"))
-    specialitet = relationship("Specialitet", back_populates="passing_grades")

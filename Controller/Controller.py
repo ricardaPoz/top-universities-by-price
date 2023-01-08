@@ -1,10 +1,10 @@
 from Database.Entity import *
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import Session
 from Model.HTTPClient.HTTPClient import HTTPClient
 from Model.Parsing.ParserHigherEducation import ParserHigherEducation
 from Model.Parsing.ParseSpecialitet import ParseSpecialitet
 import Utilities.Config as app_conf
-from multiprocessing import Pool, cpu_count, Manager, Process
+import json
 
 
 class Controller:
@@ -82,3 +82,31 @@ class Controller:
 
         session.add_all(db_specialitets)
         print(f"Вуз {education.name} добавлено {len(db_specialitets)}")
+
+    def get_all_higher_education(self) -> str:
+        session = Session(bind=self.__engine)
+
+        higher_educations = session.query(HigherEducation.HigherEducation).all()
+
+        return json.dumps(
+            [education.to_dict() for education in higher_educations],
+            ensure_ascii=False,
+            indent=4,
+        )
+
+    def get_all_specialitets_for_higher_education(self, id_higher_education) -> str:
+        session = Session(bind=self.__engine)
+
+        higher_education = session.query(HigherEducation.HigherEducation).where(
+            HigherEducation.HigherEducation.id == id_higher_education
+        ).first()
+
+        specialitets: list[Specialitet.Specialitet] = higher_education.specialitet
+
+        return json.dumps(
+            [specialitet.to_dict() for specialitet in specialitets],
+            ensure_ascii=False,
+            indent=4,
+        )
+
+

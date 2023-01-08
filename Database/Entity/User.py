@@ -1,4 +1,5 @@
 from Database.Entity.Base import Base
+from sqlalchemy_serializer import SerializerMixin
 
 from sqlalchemy import (
     Integer,
@@ -11,7 +12,7 @@ from sqlalchemy import (
 # role = Column(String(256), nullable=False)
 
 
-class User(Base):
+class User(Base, SerializerMixin):
     __tablename__ = "users"
     id = Column(Integer)
     user_name = Column(String(256), nullable=False)

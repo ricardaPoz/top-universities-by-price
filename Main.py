@@ -1,17 +1,24 @@
 from Controller.Controller import Controller
 from sqlalchemy.engine import URL
 from sqlalchemy import create_engine
-from time import perf_counter
+from flask import Flask
+from flask import request
+from flask_cors import CORS, cross_origin
 
 
-url_object = URL.create(
-    "mysql+pymysql",
-    username="19-IAS.PozdnyakovSY",
-    database="19-IAS_PozdnyakovSY",
-    password="UqO!D@vYUcEx2g%}",
-    host="s2.kts.tu-bryansk.ru",
-    port="3306",
-)
+app = Flask(__name__)
+
+
 
 Engine = create_engine(url_object)
-c = Controller(Engine)
+controller = Controller(Engine)
+
+
+@app.route("/test", methods=["GET"])
+@cross_origin(origin="*", headers=["Content-Type", "Authorization"])
+def get_shared_interests():
+    return controller.get_all_specialitets_for_higher_education(1)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
