@@ -9,7 +9,6 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 
-# role = Column(String(256), nullable=False)
 
 
 class User(Base, SerializerMixin):

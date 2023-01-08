@@ -23,5 +23,5 @@ class Specialitet(Base, SerializerMixin):
     division = Column(String(256), nullable=False)
     profile = Column(String(256), nullable=False)
     higher_education_id = Column(Integer, ForeignKey("higher_education.id"))
-    examinations = relationship("Examinations", backref="specialitet")
-    passing_grades = relationship("PassingGrades", backref="specialitet")
+    examinations = relationship("Examinations", backref="specialitet", cascade="all, delete-orphan")
+    passing_grades = relationship("PassingGrades", backref="specialitet", cascade="all, delete-orphan")

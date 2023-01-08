@@ -10,7 +10,8 @@ class HigherEducation(Education):
             "abbreviation",
             "name",
             "coast",
-            "specialitets",
+            "images",
+            "specialitets"
         ]
         self.__field_values: list[str] = None
         self.__specialitets: list[Specialitet] = None
@@ -30,7 +31,7 @@ class HigherEducation(Education):
     @specialitets.setter
     def specialitets(self, specialitets: list[Specialitet]):
         self.__specialitets = specialitets
-        self.__field_names[5] = self.__specialitets
+        self.__field_names.append(self.__specialitets)
 
     @field_values.setter
     def field_values(self, field_values: list[str]):

@@ -1,5 +1,7 @@
 from .Parsing import Parsing
 from ..Entity.HigherEducation import HigherEducation
+from .CustomLinkPrinter import CustomLinkPrinter
+from icrawler.builtin import GoogleImageCrawler
 import re
 
 
@@ -18,6 +20,14 @@ class ParserHigherEducation(Parsing):
                 value = value.strip().replace("&quot;", "")
                 arr.append(value)
             education: HigherEducation = HigherEducation()
+
+            google_crawler = GoogleImageCrawler(downloader_cls=CustomLinkPrinter)
+            google_crawler.downloader.file_urls = []
+            google_crawler.crawl(keyword=arr[3], max_num=3)
+            image =  google_crawler.downloader.file_urls
+
+            arr.append(image)
+
             education.field_values = arr
             higher_educations.append(education)
 

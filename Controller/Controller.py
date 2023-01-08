@@ -28,16 +28,18 @@ class Controller:
                 coast=education.field_values[4],
                 abbreviation=education.field_values[2],
                 detailed_information=education.field_values[0],
+                logo=education.field_values[1]
             )
             db_educations.append(db_education)
 
             session.add(db_education)
             session.flush()
 
-            db_image = Images.Images(
-                url=education.field_values[1], higher_education_id=db_education.id
-            )
-            db_images.append(db_image)
+            for image in education.field_values[5]:
+                db_image = Images.Images(
+                    url=image, higher_education_id=db_education.id
+                )
+                db_images.append(db_image)
 
         session.add_all(db_images)
 
@@ -109,4 +111,48 @@ class Controller:
             indent=4,
         )
 
+    def delete_higher_education(self, id_higher_education):
+        session = Session(bind=self.__engine)
 
+        higher_education = session.query(HigherEducation.HigherEducation).where(
+            HigherEducation.HigherEducation.id == id_higher_education
+        ).first()
+
+        session.delete(higher_education)
+        session.commit()
+
+    def delete_specialitet(self, id_specialitet):
+        session = Session(bind=self.__engine)
+        
+        specialitet = session.query(Specialitet.Specialitet).where(
+            Specialitet.Specialitet.id == id_specialitet
+        ).first()
+
+        session.delete(specialitet)
+        session.commit()
+
+    def delete_examination(self, id_examination):
+        session = Session(bind=self.__engine)
+        
+        examination = session.query(Examinations.Examinations).where(
+            Examinations.Examinations.id == id_examination
+        ).first()
+
+        session.delete(examination)
+        session.commit()
+
+    def delete_passing_grade(self, id_passing_grades):
+        session = Session(bind=self.__engine)
+        
+        passing_grade = session.query(PassingGrades.PassingGrades).where(
+            PassingGrades.PassingGrades.id == id_passing_grades
+        ).first()
+
+        session.delete(passing_grade)
+        session.commit()
+
+    def add_user(self, user_name, password):
+        session = Session(bind=self.__engine)
+
+        session.add()
+        session.commit()

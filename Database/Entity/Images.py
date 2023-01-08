@@ -8,5 +8,5 @@ from sqlalchemy_serializer import SerializerMixin
 class Images(Base, SerializerMixin):
     __tablename__ = "images"
     id = Column(Integer, primary_key=True)
-    url = Column(String(256), nullable=False)
+    url = Column(String(700), nullable=False)
     higher_education_id = Column(Integer, ForeignKey("higher_education.id"))
