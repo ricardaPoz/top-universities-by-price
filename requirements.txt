@@ -1,0 +1,10 @@
+pip install Flask
+pip install flask_cors
+pip install SQLAlchemy
+pip install PyMySQL
+pip install PyMySQL[rsa]
+pip install SQLAlchemy-serializer
+pip install beautifulsoup4
+pip install icrawler
+pip install beautifulsoup4
+pip install SQLAlchemy-serializer
