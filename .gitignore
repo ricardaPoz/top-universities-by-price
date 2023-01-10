@@ -1,5 +1,5 @@
-/Utilities
-
+/Utilities/Config.py
+/Utilities/Sql queries secret
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

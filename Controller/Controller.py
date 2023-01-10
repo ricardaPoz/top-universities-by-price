@@ -102,17 +102,17 @@ class Controller:
             ensure_ascii=False,
             indent=4,
         )
-    
+
     def get_all_higher_educations_chart(self) -> str:
         session = Session(bind=self.__engine)
-        
+
         higher_educations = self.__all_higher_educations(session)
         higher_educations = higher_educations
 
-        response = [{
-            "coast": education.coast,
-            "abbreviation": education.abbreviation
-        } for education in higher_educations]
+        response = [
+            {"coast": education.coast, "abbreviation": education.abbreviation}
+            for education in higher_educations
+        ]
 
         session.close()
         return json.dumps(response, ensure_ascii=False, indent=4)
@@ -129,8 +129,7 @@ class Controller:
         specialitets: list[Specialitet.Specialitet] = higher_education.specialitet
 
         return json.dumps(
-            [specialitet.to_dict() for specialitet in specialitets],
-            ensure_ascii=False
+            [specialitet.to_dict() for specialitet in specialitets], ensure_ascii=False
         )
 
     def delete_higher_education(self, id_higher_education):
