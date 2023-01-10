@@ -11,7 +11,7 @@ class HigherEducation(Education):
             "name",
             "coast",
             "images",
-            "specialitets"
+            "specialitets",
         ]
         self.__field_values: list[str] = None
         self.__specialitets: list[Specialitet] = None

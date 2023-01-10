@@ -35,8 +35,12 @@ class HigherEducation(Base, SerializerMixin):
     abbreviation = Column(String(100), nullable=False)
     detailed_information = Column(String(256), nullable=False)
     logo = Column(String(700), nullable=False)
-    specialitet = relationship("Specialitet", backref="higher_education", cascade="all, delete-orphan")
-    image = relationship("Images", backref="higher_education", cascade="all, delete-orphan")
+    specialitet = relationship(
+        "Specialitet", backref="higher_education", cascade="all, delete-orphan"
+    )
+    image = relationship(
+        "Images", backref="higher_education", cascade="all, delete-orphan"
+    )
     __table_args__ = (
         PrimaryKeyConstraint("id", name="higher_education_pk"),
         UniqueConstraint("name"),

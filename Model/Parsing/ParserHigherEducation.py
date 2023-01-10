@@ -24,7 +24,7 @@ class ParserHigherEducation(Parsing):
             google_crawler = GoogleImageCrawler(downloader_cls=CustomLinkPrinter)
             google_crawler.downloader.file_urls = []
             google_crawler.crawl(keyword=arr[3], max_num=3)
-            image =  google_crawler.downloader.file_urls
+            image = google_crawler.downloader.file_urls
 
             arr.append(image)
 

@@ -12,7 +12,7 @@ class HTTPClient:
         try:
             response = r.urlopen(self.__url, timeout=self.__timeouth).read()
             html = response.decode(self.__encoding)
-            
+
             return html
         except URLError as error:
             print(error)

@@ -10,7 +10,6 @@ from sqlalchemy import (
 )
 
 
-
 class User(Base, SerializerMixin):
     __tablename__ = "users"
     id = Column(Integer)

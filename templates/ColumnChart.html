@@ -1,0 +1,73 @@
+<html>
+
+<body>
+  <h3 style="display: none;" id="h">{{ utc_dt }}</h3>
+  <div id="visualization" style="width: 800px; height: 800px;"></div>
+  <button id="b1">Добавить</button>
+  <button id="b2">Удалить</button>
+</body>
+
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart', 'bar'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    let higher_education = document.getElementById("h").innerHTML.replaceAll("'", "\"");
+    let higher_education_json = JSON.parse(higher_education);
+
+    let education = [];
+
+    higher_education_json.forEach(element => {
+      education.push([element["abbreviation"], element["coast"]]);
+    });
+
+    console.log(education)
+
+    function drawChart() {
+      const addButton = document.getElementById("b1");
+      const removeButton = document.getElementById("b2");
+      const chart = new google.visualization.ColumnChart(document.getElementById("visualization"));
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Вузы');
+      data.addColumn('number', 'Цена за обучение');
+      data.addRows(education.slice(0, 3))
+
+      var option = {
+        title: "Цена за обучение в ВУЗах",
+        width: 800,
+        height: 800,
+        bar: { groupWidth: "95%" },
+        vAxis: { minValue: 0, maxValue: 1000 },
+        animation: { duration: 1000, easing: 'out' },
+        legend: { position: "none" },
+      };
+
+      function drawChart() {
+        addButton.disabled = true;
+        removeButton.disabled = true;
+
+        google.visualization.events.addListener(chart, 'ready',
+          function () {
+            addButton.disabled = (data.getNumberOfRows()) >= education.length;
+            removeButton.disabled = (data.getNumberOfRows()) < 4;
+          }
+        );
+        chart.draw(data, option);
+      }
+      addButton.onclick = function () {
+        data.addRow(education[data.getNumberOfRows()])
+        drawChart();
+      }
+      removeButton.onclick = function () {
+        data.removeRow(data.getNumberOfRows() - 1);
+        drawChart();
+      }
+      drawChart();
+    };
+
+  </script>
+</head>
+
+</html>
