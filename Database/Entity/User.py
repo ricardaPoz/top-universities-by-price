@@ -2,8 +2,7 @@ from Database.Entity.Base import Base
 from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from flask_sqlalchemy import SQLAlchemy
-
+from flask_login import UserMixin 
 
 from sqlalchemy import (
     Integer,
@@ -14,7 +13,7 @@ from sqlalchemy import (
 )
 
 
-class User(Base, SerializerMixin):
+class User(Base, SerializerMixin, UserMixin):
     __tablename__ = "users"
 
     serialize_only = (
@@ -36,3 +35,15 @@ class User(Base, SerializerMixin):
 
     def chech_password(self, password):
         return check_password_hash(self.password, password)
+    
+    def is_authenticated(self):
+        return True
+    
+    def is_active():
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)

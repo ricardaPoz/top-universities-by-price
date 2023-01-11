@@ -14,6 +14,7 @@ class ParserHigherEducation(Parsing):
         higher_educations: list[HigherEducation] = []
         elements = re.findall(self.__regex, self.__html)
 
+        elements = elements[:15]
         for element in elements:
             arr: list[str] = []
             for value in element:

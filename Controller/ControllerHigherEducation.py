@@ -7,6 +7,13 @@ import json
 class ControllerHigherEducation(ControllerDataBase):
     def __init__(self, engine):
         self.__engine = engine
+        self.__check_list = [
+            "name",
+            "coast",
+            "abbreviation",
+            "detailed_information",
+            "logo",
+        ]
 
     def get(self, id: int) -> HigherEducation:
         session = Session(bind=self.__engine)
@@ -21,8 +28,11 @@ class ControllerHigherEducation(ControllerDataBase):
         return higher_educations
 
     def add(self, **params: dict):
+        is_parameter_check = self._parameter_check(
+            self.__check_list, {k: v for k, v in params.items() if v != None}
+        )
         is_validation = self._validation_check(**params)
-        if is_validation[0] is True:
+        if is_parameter_check[0] and is_validation[0]:
             session = Session(bind=self.__engine)
             higher_education = HigherEducation(
                 name=params.get("name"),
@@ -34,21 +44,22 @@ class ControllerHigherEducation(ControllerDataBase):
             session.add(higher_education)
             session.commit()
             session.close()
-
             return {
                 "success": True,
             }
+
         else:
             return {
                 "success": False,
                 "error": "Invalid data format",
-                "options": is_validation[1],
+                "options": is_parameter_check[1] if not is_parameter_check[0] else is_validation[1],
             }
 
     def delete(self, id: int):
         session = Session(bind=self.__engine)
         higher_education = session.query(HigherEducation).get(id)
         session.delete(higher_education)
+        session.commit()
         session.close()
         return {
             "success": True,

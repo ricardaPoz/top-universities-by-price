@@ -13,4 +13,4 @@ class Examinations(Base, SerializerMixin):
     __tablename__ = "examinations"
     id = Column(Integer, primary_key=True)
     examinations = Column(String(256), nullable=False)
-    specialitet_id = Column(Integer, ForeignKey("specialitets.id"))
+    specialitet_id = Column(Integer, ForeignKey("specialitets.id", ondelete="CASCADE"))

@@ -18,4 +18,4 @@ class PassingGrades(Base, SerializerMixin):
     __tablename__ = "passing_grades"
     id = Column(Integer, primary_key=True)
     grades = Column(String(256), nullable=False)
-    specialitet_id = Column(Integer, ForeignKey("specialitets.id"))
+    specialitet_id = Column(Integer, ForeignKey("specialitets.id", ondelete="CASCADE"))

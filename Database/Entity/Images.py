@@ -9,4 +9,6 @@ class Images(Base, SerializerMixin):
     __tablename__ = "images"
     id = Column(Integer, primary_key=True)
     url = Column(String(700), nullable=False)
-    higher_education_id = Column(Integer, ForeignKey("higher_education.id"))
+    higher_education_id = Column(
+        Integer, ForeignKey("higher_education.id", ondelete="CASCADE")
+    )

@@ -7,6 +7,13 @@ import json
 class ControllerSpecialitet(ControllerDataBase):
     def __init__(self, engine):
         self.__engine = engine
+        self.__check_list = [
+            "name",
+            "form",
+            "code",
+            "division",
+            "profile",
+        ]
 
     def get(self, id: int):
         session = Session(bind=self.__engine)
@@ -21,8 +28,11 @@ class ControllerSpecialitet(ControllerDataBase):
         return specialitets
 
     def add(self, **params: dict):
+        is_parameter_check = self._parameter_check(
+            self.__check_list, {k: v for k, v in params.items() if v != None}
+        )
         is_validation = self._validation_check(**params)
-        if is_validation[0]:
+        if is_parameter_check[0] and is_validation[0]:
             session = Session(bind=self.__engine)
             specialitet = Specialitet(
                 education_id=params.get("education_id"),
@@ -43,13 +53,15 @@ class ControllerSpecialitet(ControllerDataBase):
             return {
                 "success": False,
                 "error": "Invalid data format",
-                "options": is_validation[1],
+                "options": is_parameter_check[1] if not is_parameter_check[0] else is_validation[1],
+
             }
 
     def delete(self, id: int):
         session = Session(bind=self.__engine)
         specialitet = session.query(Specialitet).get(id)
         session.delete(specialitet)
+        session.commit()
         session.close()
         return {
             "success": True,

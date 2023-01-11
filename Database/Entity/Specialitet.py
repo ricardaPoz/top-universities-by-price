@@ -22,10 +22,12 @@ class Specialitet(Base, SerializerMixin):
     code = Column(String(10), nullable=False)
     division = Column(String(256), nullable=False)
     profile = Column(String(256), nullable=False)
-    higher_education_id = Column(Integer, ForeignKey("higher_education.id"))
+    higher_education_id = Column(
+        Integer, ForeignKey("higher_education.id", ondelete="CASCADE")
+    )
     examinations = relationship(
-        "Examinations", backref="specialitet", cascade="all, delete-orphan"
+        "Examinations", backref="specialitet", passive_deletes=True
     )
     passing_grades = relationship(
-        "PassingGrades", backref="specialitet", cascade="all, delete-orphan"
+        "PassingGrades", backref="specialitet", passive_deletes=True
     )

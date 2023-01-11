@@ -26,9 +26,12 @@ class ControllerDataBase(ABC):
     def all_to_json(self):
         pass
 
+    def _parameter_check(self, name: list, params: dict):
+        res = {value: "null" for value in name if value not in params.keys()}
+        return (False, list(res.keys())) if len(res) > 0 else (True,)
+
     def _validation_check(self, **params: dict):
         dict_validation = {}
-
         for name, value in params.items():
             match value:
                 case None:
@@ -37,9 +40,15 @@ class ControllerDataBase(ABC):
                     dict_validation[name] = len(value.strip())
                 case int():
                     dict_validation[name] = 1
-
         return (
             (True,)
             if 0 not in dict_validation.values()
-            else (False, dict(filter(lambda k_v: k_v[1] == 0, dict_validation.items())))
+            else (
+                False,
+                list(
+                    dict(
+                        filter(lambda k_v: k_v[1] == 0, dict_validation.items())
+                    ).keys()
+                ),
+            )
         )
