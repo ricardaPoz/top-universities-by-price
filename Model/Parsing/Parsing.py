@@ -2,6 +2,6 @@ from abc import abstractclassmethod, ABC
 
 
 class Parsing(ABC):
-    @abstractclassmethod
+    @classmethod
     def parse(self):
         pass

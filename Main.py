@@ -1,15 +1,20 @@
-from Controller.Controller import Controller
+from Controller.DataBaseCRUD import (
+    DataBaseCRUD,
+    ControllerUser,
+    ControllerHigherEducation,
+    ControllerImages,
+    ControllerSpecialitet,
+    ControllerPassingGrades,
+    ControllerExaminations,
+)
+
+# from Controller.ControllerInitializingDB import ControllerInitializingDB
 from sqlalchemy.engine import URL
 from sqlalchemy import create_engine
+from flask_login import LoginManager
 from flask import Flask, request, render_template
 from flask_cors import CORS, cross_origin
 from Utilities.Config import DB_PARAMS
-
-
-app = Flask(__name__)
-cors = CORS(app, resources={r"/get_shared_interests": {"origins": "*"}})
-app.config["CORS_HEADERS"] = "Content-Type"
-
 
 url_object = URL.create(
     DB_PARAMS.get("DBAPI"),
@@ -20,23 +25,34 @@ url_object = URL.create(
     port=DB_PARAMS.get("port"),
 )
 
+# application = Flask(__name__)
+# login_manager = LoginManager(application)
+
+
+# cors = CORS(application, resources={r"/get_shared_interests": {"origins": "*"}})
+# application.config["CORS_HEADERS"] = "Content-Type"
+
 
 Engine = create_engine(url_object)
-controller = Controller(Engine)
+all = DataBaseCRUD(ControllerHigherEducation(Engine)).delete(1)
+x = 1
 
 
+# x = controller.get_all_higher_educations()
 
-@app.route("/higher_education", methods=["GET"])
-@cross_origin(origin="*", headers=["Content-Type", "Authorization"])
-def get_shared_interests():
-    return controller.get_all_higher_educations_chart()
+# y = 1
 
-@app.route('/')
-def hello():
-    higher_educations = controller.get_all_higher_educations_chart()
-    return render_template('ColumnChart.html', utc_dt=higher_educations)
+# @application.route("/higher_education", methods=["GET"])
+# @cross_origin(origin="*", headers=["Content-Type", "Authorization"])
+# def get_shared_interests():
+#     return controller.get_all_higher_educations_chart()
 
-if __name__ == "__main__":
-    app.run(debug=True)
-   # x = controller.get_all_higher_education()
-    # return render_template('1.html', utc_dt=controller.get_all_higher_education())
+# @application.route('/')
+# def hello():
+#     higher_educations = controller.get_all_higher_educations_chart()
+#     return render_template('ColumnChart.html', utc_dt=higher_educations)
+
+# if __name__ == "__main__":
+#     application.run(debug=True)
+#    # x = controller.get_all_higher_education()
+#     # return render_template('1.html', utc_dt=controller.get_all_higher_education())
